@@ -9,7 +9,7 @@
 
 def call(Map cfg) {
     // 1. Validate required keys
-    def required = ['registryUrl', 'repo', 'tag', 'credentialsId']
+    def required = ['registryUrl', 'tag', 'credentialsId']
     required.each { key ->
         if (!cfg.containsKey(key) || cfg[key] == null || cfg[key].toString().trim() == '') {
             error "dockerBuild: Missing required parameter '${key}'. Got cfg=${cfg}"
@@ -18,7 +18,7 @@ def call(Map cfg) {
 
     // 2. Build registry URL and image name
     String registry  = "https://${cfg.registryUrl}"
-    String imageName = "${cfg.registryUrl}/${cfg.repo}:${cfg.tag}"
+    String imageName = "${cfg.registryUrl}:${cfg.tag}"
 
     // 3. Login to registry, build and push image
     docker.withRegistry(registry, cfg.credentialsId) {
