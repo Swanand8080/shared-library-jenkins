@@ -2,7 +2,6 @@
 // Usage in Jenkinsfile:
 // dockerBuild([
 //   registryUrl  : "123456789012.dkr.ecr.ap-south-1.amazonaws.com",
-//   repo         : "my-service",
 //   tag          : env.BUILD_ID,
 //   credentialsId: "ecr:ap-south-1:aws-jenkins-creds"
 // ])
