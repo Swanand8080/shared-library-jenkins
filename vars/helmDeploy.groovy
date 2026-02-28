@@ -12,11 +12,9 @@ def call(Map config) {
     }
 
        // EKS auth
-           (awsCredentialsId) {
-                withAWS(credentials: awsCredentialsId, region: region) {
+         withAWS(credentials: awsCredentialsId, region: region) {
                     sh "aws eks update-kubeconfig --name ${clusterName} --region ${region}"
                 }
-            }
 
             sh "helm lint ${chartPath}"
             
