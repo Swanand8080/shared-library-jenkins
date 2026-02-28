@@ -15,7 +15,7 @@ def call(Map config) {
     withAWS(credentials: awsCredentialsId, region: region) {
         sh """
           mkdir -p "\$PWD/.kube"
-          export KUBECONFIG="\$PWD/.kube/config"
+          #export KUBECONFIG="\$PWD/.kube/config"
           aws eks update-kubeconfig --name ${clusterName} --region ${region}
         """
     }
@@ -23,12 +23,12 @@ def call(Map config) {
     def setArgs = setValues.collect { "--set ${it}" }.join(' ')
 
     sh """
-      export KUBECONFIG=\$PWD/.kube/config
+      #export KUBECONFIG=\$PWD/.kube/config
       #helm lint ${chartPath}
     """
 
     sh """
-      export KUBECONFIG=\$PWD/.kube/config
+      #export KUBECONFIG=\$PWD/.kube/config
       helm upgrade --install ${releaseName} ${chartPath} \
         --namespace ${namespace} \
         --create-namespace \
@@ -40,7 +40,7 @@ def call(Map config) {
     """
 
     sh """
-      export KUBECONFIG=\$PWD/.kube/config
+      #export KUBECONFIG=\$PWD/.kube/config
       helm status ${releaseName} -n ${namespace}
     """
 }
