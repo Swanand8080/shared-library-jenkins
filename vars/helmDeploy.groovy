@@ -16,14 +16,20 @@ def call(Map config) {
                     sh """
                     mkdir -p "$PWD/.kube"
                     export KUBECONFIG="$PWD/.kube/config"
-                    aws eks update-kubeconfig --name ${clusterName} --region ${region}"
+                    aws eks update-kubeconfig --name ${clusterName} --region ${region}
                     """
                 }
 
-            sh "helm lint ${chartPath}"
+            def setArgs = setValues.collect { "--set ${it}" }.join(' ')
+            
+            sh """
+                export KUBECONFIG=\$PWD/.kube/config
+                helm lint ${chartPath}
+                """
             
             def setArgs = setValues.collect { "--set ${it}" }.join(' ')
             sh """
+                export KUBECONFIG=\$PWD/.kube/config
                 helm upgrade --install ${releaseName} ${chartPath} \
                 --namespace ${namespace} \
                 --create-namespace \
