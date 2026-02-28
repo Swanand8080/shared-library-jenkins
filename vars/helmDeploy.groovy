@@ -11,9 +11,7 @@ def call(Map config) {
         error "releaseName, namespace, clusterName, awsCredentialsId required for EKS"
     }
 
-    node {
-        container('helm') {
-            // EKS auth
+       // EKS auth
            (awsCredentialsId) {
                 withAWS(credentials: awsCredentialsId, region: region) {
                     sh "aws eks update-kubeconfig --name ${clusterName} --region ${region}"
@@ -34,6 +32,4 @@ def call(Map config) {
                 --history-max 5
             """
             sh "helm status ${releaseName} -n ${namespace}"
-        }
-    }
 }
