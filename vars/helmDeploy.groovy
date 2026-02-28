@@ -14,8 +14,8 @@ def call(Map config) {
        // EKS auth
          withAWS(credentials: awsCredentialsId, region: region) {
                     sh """
-                    export HOME=\$PWD
-                    mkdir -p \$HOME/.kube
+                    mkdir -p "$PWD/.kube"
+                    export KUBECONFIG="$PWD/.kube/config"
                     aws eks update-kubeconfig --name ${clusterName} --region ${region}"
                     """
                 }
@@ -33,5 +33,8 @@ def call(Map config) {
                 --wait \
                 --history-max 5
             """
-            sh "helm status ${releaseName} -n ${namespace}"
+            sh """
+      export KUBECONFIG=\$PWD/.kube/config
+      helm status ${releaseName} -n ${namespace}
+    """
 }
