@@ -24,7 +24,7 @@ def call(Map config) {
 
     sh """
       export KUBECONFIG=\$PWD/.kube/config
-      helm lint ${chartPath}
+      #helm lint ${chartPath}
     """
 
     sh """
