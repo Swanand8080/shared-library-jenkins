@@ -16,8 +16,6 @@ def call(Map config) {
         sh """
          aws eks update-kubeconfig --name ${clusterName} --region ${region}
         """
-    }
-
     def setArgs = setValues.collect { "--set ${it}" }.join(' ')
 
     sh """
@@ -38,4 +36,5 @@ def call(Map config) {
     sh """
         helm status ${releaseName} -n ${namespace}
     """
+}
 }
