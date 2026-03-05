@@ -36,4 +36,3 @@ def call(Map config) {
         helm status ${releaseName} -n ${namespace}
     """
 }
-}
