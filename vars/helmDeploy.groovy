@@ -15,9 +15,11 @@ def call(Map config) {
     //    sh """
     //     aws eks update-kubeconfig --name ${clusterName} --region ${region}
     //    """
-    def regularValues = setValues.findAll { !it.startsWith('ingress.annotations.') }
+    // def regularValues = setValues.findAll { !it.startsWith('ingress.annotations.') }
+    def regularValues = setValues.findAll { !it.startsWith('ingress.annotations.') && !it.startsWith('ingress.device.annotations.') }
     def annotationValues = setValues.findAll { it.startsWith('ingress.annotations.') }
-
+    def deviceAnnotationValues = setValues.findAll { it.startsWith('ingress.device.annotations.') }
+    
     def setArgs = regularValues.collect { "--set ${it}" }.join(' ')
 
     if (annotationValues) {
@@ -29,6 +31,15 @@ def call(Map config) {
         def jsonAnnotations = groovy.json.JsonOutput.toJson(annotationsMap)
         setArgs += " --set-json 'ingress.annotations=${jsonAnnotations}'"
     }
+    if (deviceAnnotationValues) {
+    def deviceAnnotationsMap = deviceAnnotationValues.collectEntries { entry ->
+        def parts = entry.split('=', 2)
+        def key = parts[0].replace('ingress.device.annotations.', '')
+        [(key): parts[1]]
+    }
+    def jsonDeviceAnnotations = groovy.json.JsonOutput.toJson(deviceAnnotationsMap)
+    setArgs += " --set-json 'ingress.device.annotations=${jsonDeviceAnnotations}'"
+}   
 
     sh """
      #helm lint ${chartPath}
