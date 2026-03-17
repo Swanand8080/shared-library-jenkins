@@ -20,7 +20,7 @@ def call(Map config) {
     def annotationValues = setValues.findAll { it.startsWith('ingress.annotations.') }
     def deviceAnnotationValues = setValues.findAll { it.startsWith('ingress.device.annotations.') }
     
-    def setArgs = regularValues.collect { "--set ${it}" }.join(' ')
+    def setArgs = regularValues.collect { "--set \"${it}\"" }.join(' ')
 
     if (annotationValues) {
         def annotationsMap = annotationValues.collectEntries { entry ->
